@@ -89,6 +89,13 @@ if(isset($_POST["submit"])){
             }
         }
     }
+} else {
+    $firstname = "";
+    $lastname = "";
+    $gender = "";
+    $birthdate = "";
+    $country = "";
+    $email = "";
 }
 
 if($showForm){
@@ -100,16 +107,16 @@ if($showForm){
         echo "</ul>";
     }
     echo "<form method=\"POST\">";
-        echo "<input type=\"text\" name=\"firstname\" placeholder=\"Voornaam\">";
-        echo "<input type=\"text\" name=\"lastname\" placeholder=\"Achternaam\">";
+        echo "<input type=\"text\" name=\"firstname\" value=\"".$firstname."\" placeholder=\"Voornaam\">";
+        echo "<input type=\"text\" name=\"lastname\" value=\"".$lastname."\" placeholder=\"Achternaam\">";
         $genderOptions = array("Man", "Vrouw");
         for($i = 0; $i < count($genderOptions); $i++){
             echo "<input type=\"radio\" name=\"gender\" id=\"gender_".$i."\" value=\"".$genderOptions[$i]."\">";
             echo "<label for=\"gender_".$i."\">".$genderOptions[$i]."</label>";
         }
-        echo "<input type=\"date\" name=\"birthdate\" placeholder=\"Geboortedatum\">";
-        echo "<input type=\"text\" name=\"country\" placeholder=\"Land\">";
-        echo "<input type=\"email\" name=\"email\" placeholder=\"Email adres\">";
+        echo "<input type=\"date\" name=\"birthdate\" value=\"".$birthdate."\" placeholder=\"Geboortedatum\">";
+        echo "<input type=\"text\" name=\"country\" value=\"".$country."\" placeholder=\"Land\">";
+        echo "<input type=\"email\" name=\"email\" value=\"".$email."\" placeholder=\"Email adres\">";
         echo "<input type=\"password\" name=\"password\" placeholder=\"Wachtwoord\">";
         echo "<input type=\"password\" name=\"password2\" placeholder=\"Wachtwoord bevestigen\">";
         echo "<input name=\"submit\" type=\"submit\" value=\"Registreren\">";

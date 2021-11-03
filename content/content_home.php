@@ -34,6 +34,8 @@ if(isset($_POST["submit"])){
             }
         }
     }
+} else {
+    $email = "";
 }
 
 if($showForm){
@@ -45,7 +47,7 @@ if($showForm){
         echo "</ul>";
     }
     echo "<form method=\"POST\">";
-        echo "<input type=\"email\" name=\"email\" placeholder=\"Je email adres\" autofocus>";
+        echo "<input type=\"email\" name=\"email\" value=\"".$email."\" placeholder=\"Je email adres\" autofocus>";
         echo "<input type=\"password\" name=\"password\" placeholder=\"Je wachtwoord\">";
         echo "<input name=\"submit\" type=\"submit\" value=\"Inloggen\">";
     echo "</form>";
