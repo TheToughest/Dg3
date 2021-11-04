@@ -13,36 +13,15 @@ if(isset($_GET["profileId"]) && $_GET["profileId"] > 0){
     
     
         // Get posts
-        $sql = "SELECT * FROM post WHERE userId=? ORDER BY postDate DESC";
+        $sql = "SELECT id FROM post WHERE userId=? ORDER BY postDate DESC";
         if($result = $db->prepare($sql)){
             $result->execute([intval($_GET["profileId"])]);
             if($result->rowCount() > 0){
                 $result = $result->fetchAll(PDO::FETCH_ASSOC);
     
                 foreach($result as $post){
-                    $post_content = $post["content"];
-                    $post_date = $post["postDate"];
-                    $post_userId = $post["userId"];
-                    $post_user_fullName = "";
-    
-                    $sql = "SELECT firstName, lastName FROM user WHERE id='".$post_userId."' LIMIT 1";
-                    if($result = $db->prepare($sql)){
-                        $result->execute();
-                        if($result->rowCount() == 1){
-                            $result = $result->fetchAll(PDO::FETCH_ASSOC);
-                            $result = $result[0];
-    
-                            $post_user_fullName = $result["firstName"] . " " . $result["lastName"];
-    
-                            
-                            echo "<div class=\"post\">";
-                                echo "<a href=\"?profileId=".$post_userId."\"><strong>".$post_user_fullName."</strong></a>";
-                                echo "<span class=\"date\">".$post_date."</span>";
-                                echo "<p>".$post_content."</p>";
-                            echo "</div>";
-                        }
-                    }
-    
+                    $p = new Post($db, $post["id"]);
+                    $p->render();
                 }
             }
         }

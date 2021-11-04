@@ -1,7 +1,10 @@
 <?php
+
 session_start();
 require("functions.php");
 require("db.php");
+
+include("classes/post.class.php");
 
 if(isset($_GET["profileId"]) && $_GET["profileId"] > 0){
     $activePageId = 5;

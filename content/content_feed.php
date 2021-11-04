@@ -5,7 +5,7 @@ echo "<a href=\"?page=4\">Uitloggen</a>";
 $showForm = true;
 $errors = array();
 
-if(isset($_POST["submit"])){
+if(isset($_POST["postSubmit"])){
     $content = trim(strip_tags($_POST["content"]));
 
     if(strlen($content) < 1){
@@ -39,40 +39,19 @@ if($showForm){
     }
     echo "<form method=\"POST\">";
         echo "<textarea rows=\"5\" cols=\"40\" placeholder=\"Wat ben je aan het doen?\" name=\"content\"></textarea>";
-        echo "<input name=\"submit\" type=\"submit\" value=\"Plaatsen\">";
+        echo "<input name=\"postSubmit\" type=\"submit\" value=\"Plaatsen\">";
     echo "</form>";
 }
 
-$sql = "SELECT * FROM post ORDER BY postDate DESC";
+$sql = "SELECT id FROM post ORDER BY postDate DESC";
 if($result = $db->prepare($sql)){
     $result->execute();
     if($result->rowCount() > 0){
         $result = $result->fetchAll(PDO::FETCH_ASSOC);
 
         foreach($result as $post){
-            $post_content = $post["content"];
-            $post_date = $post["postDate"];
-            $post_userId = $post["userId"];
-            $post_user_fullName = "";
-
-            $sql = "SELECT firstName, lastName FROM user WHERE id='".$post_userId."' LIMIT 1";
-            if($result = $db->prepare($sql)){
-                $result->execute();
-                if($result->rowCount() == 1){
-                    $result = $result->fetchAll(PDO::FETCH_ASSOC);
-                    $result = $result[0];
-
-                    $post_user_fullName = $result["firstName"] . " " . $result["lastName"];
-
-                    
-                    echo "<div class=\"post\">";
-                        echo "<a href=\"?profileId=".$post_userId."\"><strong>".$post_user_fullName."</strong></a>";
-                        echo "<span class=\"date\">".$post_date."</span>";
-                        echo "<p>".$post_content."</p>";
-                    echo "</div>";
-                }
-            }
-
+            $p = new Post($db, $post["id"]);
+            $p->render();
         }
     }
 }
