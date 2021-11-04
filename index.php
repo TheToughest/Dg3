@@ -44,7 +44,12 @@ if($result = $db->prepare($sql)){
             break;
             case 5:
                 $userData = getUserData($db, $_GET["profileId"]);
-                $pageTitle = $userData["firstName"] . " " . $userData["lastName"];
+                if($userData != null){
+                    $pageTitle = $userData["firstName"] . " " . $userData["lastName"];
+                } else {
+                    $pageTitle = "Profiel niet gevonden";
+                }
+                
             break;
         }
         $pageContent = $result["content"];
@@ -54,7 +59,7 @@ if($result = $db->prepare($sql)){
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 
 <head>
     <meta charset="UTF-8">
@@ -94,6 +99,10 @@ if($result = $db->prepare($sql)){
 
             case 5:
                 include_once("content/content_profile.php");
+            break;
+
+            case 6:
+                include_once("content/content_editprofile.php");
             break;
 
         }
