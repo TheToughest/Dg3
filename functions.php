@@ -25,7 +25,11 @@ function getUserData($db, $userId){
             
 
             return $result;
+        } else {
+            return null;
         }
+    } else {
+        return null;
     }
 }
 
