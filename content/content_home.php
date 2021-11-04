@@ -37,20 +37,42 @@ if(isset($_POST["submit"])){
 } else {
     $email = "";
 }
+?>
 
-if($showForm){
-    if(count($errors) > 0){
-        echo "<ul class=\"errors\">";
-            for ($i=0; $i < count($errors); $i++) { 
-                echo "<li>".$errors[$i]."</li>";
-            }
-        echo "</ul>";
-    }
-    echo "<form method=\"POST\">";
-        echo "<input type=\"email\" name=\"email\" value=\"".$email."\" placeholder=\"Je email adres\" autofocus>";
-        echo "<input type=\"password\" name=\"password\" placeholder=\"Je wachtwoord\">";
-        echo "<input name=\"submit\" type=\"submit\" value=\"Inloggen\">";
-    echo "</form>";
+<section class="vh-100">
+    <div class="container py-5 h-100">
+        <div class="row d-flex align-items-center justify-content-center h-100">
+            <div class="col-md-8 col-lg-7 col-xl-6">
+                <img src="assets/images/login logo.png" class="img-fluid" alt="Phone image">
+            </div>
+            <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
+                <form method="POST">
+                <!-- Email input -->
+                <div class="form-outline mb-4">
+                    <input type="email" name="email" id="form1Example13" value="<?php $email ?>" class="form-control form-control-lg" placeholder="Je email adres" />
+                    <label class="form-label" for="form1Example13">Email address</label>
+                </div>
 
-    echo "<a href=\"?page=2\">Account aanmaken</a>";
-}
+                <!-- Password input -->
+                <div class="form-outline mb-4">
+                    <input type="password" name="password" placeholder="Je wachtwoord" id="form1Example23" class="form-control form-control-lg" />
+                    <label class="form-label" for="form1Example23">Password</label>
+                </div>
+                <?php
+                if(count($errors) > 0){
+                    echo "<ul class=\"errors\">";
+                        for ($i=0; $i < count($errors); $i++) { 
+                            echo "<li>".$errors[$i]."</li>";
+                        }
+                    echo "</ul>";
+                }
+                ?>
+                <!-- Submit button -->
+                <button type="submit" name="submit" value="inloggen" class="btn btn-primary btn-lg btn-block">Sign in</button>
+                <!-- <a type="submit" name="submit" value="registreer" class="btn btn-primary btn-lg btn-block">Register</button> -->
+                </form>
+                <a href="?page=2" value="registreer" class="btn btn-primary btn-lg btn-block">Register</a>
+            </div>
+        </div>
+    </div>
+</section>
