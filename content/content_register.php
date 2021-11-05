@@ -168,13 +168,10 @@ if(isset($_POST["submit"])){
                 </div>
 
                 <div class="d-flex justify-content-end pt-3">
-                  <button type="button" class="btn btn-light btn-lg">Reset all</button>
-                  <button type="button" class="btn btn-warning btn-lg ms-2">Submit form</button>
+                  <a href="index.php" value="registreer" class="btn btn-secondary btn-lg btn-block">Terug</a>
+                  <button type="button" class="btn btn-primary btn-lg ms-2">Registreer</button>
                 </div>
-
               </div>
-
-              <a href="index.php" value="registreer" class="btn btn-primary btn-lg btn-block">Toch inloggen?</a>
             </div>
         </div>
     </div>
