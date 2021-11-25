@@ -69,7 +69,7 @@ if(isset($_POST["submit"])){
                 ?>
                 <!-- Submit button -->
                 <div class="row">
-                    <button type="submit" name="submit" value="inloggen" class="btn btn-primary btn-lg btn-block">Sign in</button>
+                    <button type="submit" name="submit" value="inloggen" class="btn btn-primary btn-lg btn-block">Login</button>
                     <!-- <a type="submit" name="submit" value="registreer" class="btn btn-primary btn-lg btn-block">Register</button> -->
                     <a href="?page=2" value="registreer" class="btn btn-secondary btn-lg btn-block mt-5">Registreren</a>
                 </div>

@@ -132,47 +132,76 @@ if(isset($_POST["submit"])){
                 <img src="assets/images/login logo.png" alt="Sample photo" class="img-fluid"/>
             </div>
             <div class="col-xl-6">
-              <div class="card-body p-md-5 text-black">
-                <h3 class="mb-5 text-uppercase">Vul hier je gegevens in</h3>
+                <div class="card-body p-md-5 text-black">
+                    <form method="POST">
+                        <h3 class="mb-5 text-uppercase">Vul hier je gegevens in</h3>
 
-                <div class="row">
-                  <div class="col-md-6 mb-4">
-                    <div class="form-outline">
-                      <input type="text" id="form3Example1m" class="form-control form-control-lg" />
-                      <label class="form-label" for="form3Example1m">First name</label>
-                    </div>
-                  </div>
-                  <div class="col-md-6 mb-4">
-                    <div class="form-outline">
-                      <input type="text" id="form3Example1n" class="form-control form-control-lg" />
-                      <label class="form-label" for="form3Example1n">Last name</label>
-                    </div>
-                  </div>
-                </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="form-outline">
+                                    <input type="text" name="firstname" value="<?php $firstname ?>" placeholder="Voornaam" class="form-control form-control-lg"/>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="form-outline">
+                                    <input type="text" name="lastname" value="<?php $lastname ?>" placeholder="Achternaam" class="form-control form-control-lg"/>
+                                </div>
+                            </div>
+                        </div>
 
-                <div class="d-md-flex justify-content-start align-items-center mb-4 py-2">
-                  <h6 class="mb-0 me-4">Gender: </h6>
-                  <div class="form-check form-check-inline mb-0 me-4">
-                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="femaleGender" value="option1"/>
-                    <label class="form-check-label" for="femaleGender">Female</label>
-                  </div>
+                        <div class="d-md-flex justify-content-start align-items-center mb-4 py-2">
+                            <h6 class="mb-0 me-4">Gender: </h6>
+                            <div class="form-check form-check-inline mb-0 me-4">
+                                <?php
+                                    $genderOptions = array("Man", "Vrouw");
+                                    for($i = 0; $i < count($genderOptions); $i++){
+                                        echo "<input class=\"form-check-radio form-outline\" type=\"radio\" name=\"gender\" id=\"gender_".$i."\" value=\"".$genderOptions[$i]."\">";
+                                        echo "<label class=\"form-check-label\" for=\"gender_".$i."\">".$genderOptions[$i]."</label>";
+                                    }
+                                ?>
+                            </div>
+                        </div>
 
-                  <div class="form-check form-check-inline mb-0 me-4">
-                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="maleGender" value="option2"/>
-                    <label class="form-check-label" for="maleGender">Male</label>
-                  </div>
-                </div>
-                <div class="form-outline mb-4">
-                  <input type="text" id="form3Example97" class="form-control form-control-lg" />
-                  <label class="form-label" for="form3Example97">Email ID</label>
-                </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="form-outline">
+                                    <input class="form-control form-control-lg" type="date" name="birthdate" value="<?php $birthdate ?>"placeholder="Geboortedatum">
+                                    <label class="form-check-label" for="birthdate">Geboortedatum</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="form-outline">
+                                    <input class="form-control form-control-lg" type="text" name="country" value="<?php $country ?>" placeholder="Land">
+                                    <label class="form-check-label" for="country">Land</label>
+                                </div>
+                            </div>
+                        </div>
 
-                <div class="d-flex justify-content-end pt-3">
-                  <a href="index.php" value="registreer" class="btn btn-secondary btn-lg btn-block">Terug</a>
-                  <button type="button" class="btn btn-primary btn-lg ms-2">Registreer</button>
+                        <div class="form-outline mb-4">
+                            <input type="text" id="form3Example97" class="form-control form-control-lg" />
+                            <label class="form-label" for="form3Example97">Email</label>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="form-outline">
+                                    <input class="form-control form-control-lg" type="password" name="password" placeholder="Wachtwoord">
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="form-outline">
+                                    <input class="form-control form-control-lg" type="password" name="password2" placeholder="Wachtwoord bevestigen">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end pt-3">
+                            <a href="index.php" value="registreer" class="btn btn-secondary btn-lg btn-block">Terug</a>
+                            <button type="button" class="btn btn-primary btn-lg ms-2">Registreer</button>
+                        </div>
+                    </form>     
                 </div>
-              </div>
             </div>
         </div>
-    </div>
+    </div> 
 </section>
