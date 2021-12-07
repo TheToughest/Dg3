@@ -3,91 +3,43 @@ $showForm = true;
 $errors = array();
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
-    $firstname = trim(strip_tags($_POST["firstname"]));
-    $lastname = trim(strip_tags($_POST["lastname"]));
 
-    if(isset($_POST["gender"])){
-        $gender = trim(strip_tags($_POST["gender"]));
-    } else {
-        $gender = "";
-    }
-    
-    $country = trim(strip_tags($_POST["country"]));
-    $birthdate = trim(strip_tags($_POST["birthdate"]));
-    $email = strtolower(trim(strip_tags($_POST["email"])));
-    $password = trim(strip_tags($_POST["password"]));
-    $password2 = trim(strip_tags($_POST["password2"]));
+    $firstname = $_POST["firstname"];
+    $lastname = $_POST["lastname"];
+    $gender = $_POST["gender"];
+    $birthdate = $_POST["birthdate"];
+    $country = $_POST["country"];
+    $email = $_POST["email"];
+    $profileFont = $_POST["profileFont"];
+    $profileColor = $_POST["profileColor"];
+    $biography = $_POST["biography"];
 
-    if(strlen($firstname) < 1){
-        array_push($errors, "Vul je voornaam in om door te gaan.");
-    }
+    $newpassword = $_POST["newpassword"];
+    $newpassword2 = $_POST["newpassword2"];
+    $password = $_POST["password"];
+    // $file = $_POST["file"];
 
-    if(strlen($lastname) < 1){
-        array_push($errors, "Vul je achternaam in om door te gaan.");
-    }
-
-    if(strlen($firstname) > 100){
-        array_push($errors, "Je voornaam mag niet korter zijn dan 100 tekens, kort deze in om door te gaan.");
-    }
-
-    if(strlen($lastname) > 100){
-        array_push($errors, "Je achternaam mag niet korter zijn dan 100 tekens, kort deze in om door te gaan.");
+    if(strlen($newpassword) > 0){
+        if(strlen($newpassword) < 8){
+            array_push($errors, "Je nieuwe wachtwoord moet minimaal 8 tekens zijn.");
+        } else {
+            if($password != $newpassword){
+                array_push($errors, "Je nieuwe wachtwoord komt niet overeen.");
+            }
+        }
     }
 
-    if(strlen($email) < 1){
-        array_push($errors, "Vul een email adres in om door te gaan.");
-    }
-
-    if(strlen($country) < 1){
-        array_push($errors, "Vul je nationaliteit in om door te gaan.");
-    }
-
-    if(strlen($birthdate) < 1){
-        array_push($errors, "Vul je geboortedatum in om door te gaan.");
-    }
-
-    if(strlen($gender) < 1){
-        array_push($errors, "Vul je geslacht in om door te gaan.");
-    }
-
-    if(strlen($password) < 8){
-        array_push($errors, "Je wachtwoord dient minimaal 8 tekens te zijn.");
-    }
-
-    if($password != $password2){
-        array_push($errors, "De ingevulde wachtwoorden komen niet overeen.");
-    }
 
 
 
     if(!count($errors) > 0){
-        $sql = "SELECT id FROM user WHERE email='".$email."' ORDER BY id";
-        if($result = $db->prepare($sql)){
-            $result->execute();
-            if($result->rowCount() != 0){
-                array_push($errors, "Er bestaat al een account met dit email adres.");
-            } else {
-                $sql = "INSERT INTO user (firstName, lastName, country, birthdate, gender, email, password) VALUES (
-                '".$firstname."', 
-                '".$lastname."', 
-                '".$country."', 
-                '".$birthdate."', 
-                '".$gender."', 
-                '".$email."', 
-                '".password_hash($password, PASSWORD_DEFAULT)."')";
-
-                if($insert = $db->prepare($sql)){
-                    if($insert->execute()){
-                        login(intval($db->lastInsertId()));
-                        header("Location: index.php");
-                    } else {
-                        array_push($errors, "Er is iets foutgegaan bij het aanmaken van je account. (Foutcode #001)");
-                    }
-                } else {
-                    array_push($errors, "Er is iets foutgegaan bij het aanmaken van je account. (Foutcode #002)");
-                }
-            }
+        // first check if password is correct
+        
+        if($password != $newpassword){
+            // change password
         }
+
+
     }
 
 } else {
@@ -97,6 +49,33 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $birthdate = "";
     $country = "";
     $email = "";
+    $newpassword = "";
+    $newpassword2 = "";
+    $profileFont = "";
+    $profileColor = "";
+    $biography = "";
+    $profilePicture = "";
+    $password = "";
+
+    $sql = "SELECT firstname, lastname, gender, birthdate, country, email, profileFont, profileColor, biography FROM user WHERE id=".$_SESSION["userId"]." LIMIT 1";
+    if($result = $db->prepare($sql)){
+        $result->execute();
+        if($result->rowCount() > 0){
+            $result = $result->fetchAll(PDO::FETCH_ASSOC);
+            $result = $result[0];
+
+            $firstname = $result["firstname"];
+            $lastname = $result["lastname"];
+            $gender = $result["gender"];
+            $birthdate = $result["birthdate"];
+            $country = $result["country"];
+            $email = $result["email"];
+            $profileFont = $result["profileFont"];
+            $profileColor = $result["profileColor"];
+            $biography = $result["biography"];
+
+        }
+    }
 }
 
 
@@ -116,36 +95,42 @@ if($showForm){
 
         echo "<div class=\"form-input\">";
             echo "<label>Voornaam</label>";
-            echo "<input type=\"text\" name=\"firstname\" value=\"".$firstname."\" placeholder=\"Voornaam\">";
+            echo "<input type=\"text\" name=\"firstname\" value=\"".$firstname."\" placeholder=\"Voornaam\" required>";
         echo "</div>";
 
         echo "<div class=\"form-input\">";
             echo "<label>Achternaam</label>";
-            echo "<input type=\"text\" name=\"lastname\" value=\"".$lastname."\" placeholder=\"Achternaam\">";
+            echo "<input type=\"text\" name=\"lastname\" value=\"".$lastname."\" placeholder=\"Achternaam\" required>";
         echo "</div>";
 
         echo "<div class=\"form-input\">";
             echo "<label>Geslacht</label>";
             $genderOptions = array("Man", "Vrouw");
             for($i = 0; $i < count($genderOptions); $i++){
-                echo "<input type=\"radio\" name=\"gender\" id=\"gender_".$i."\" value=\"".$genderOptions[$i]."\">";
+                if($gender == $i){
+                    echo "<input type=\"radio\" name=\"gender\" id=\"gender_".$i."\" value=\"".$genderOptions[$i]."\" checked required>";
+                } else {
+                    echo "<input type=\"radio\" name=\"gender\" id=\"gender_".$i."\" value=\"".$genderOptions[$i]."\" required>";
+                }
+                    
+
                 echo "<label for=\"gender_".$i."\">".$genderOptions[$i]."</label>";
             }
         echo "</div>";
 
         echo "<div class=\"form-input\">";
             echo "<label>Geboortedatum</label>";
-            echo "<input type=\"date\" name=\"birthdate\" value=\"".$birthdate."\" placeholder=\"Geboortedatum\">";
+            echo "<input type=\"date\" name=\"birthdate\" value=\"".$birthdate."\" placeholder=\"Geboortedatum\" required>";
         echo "</div>";
 
         echo "<div class=\"form-input\">";
             echo "<label>Land</label>";
-            echo "<input type=\"text\" name=\"country\" value=\"".$country."\" placeholder=\"Land\">";
+            echo "<input type=\"text\" name=\"country\" value=\"".$country."\" placeholder=\"Land\" required>";
         echo "</div>";
 
         echo "<div class=\"form-input\">";
             echo "<label>Email adres</label>";
-            echo "<input type=\"email\" name=\"email\" value=\"".$email."\" placeholder=\"Email adres\">";
+            echo "<input type=\"email\" name=\"email\" value=\"".$email."\" placeholder=\"Email adres\" required>";
         echo "</div>";
 
         echo "<p class=\"tooltip\">Laat de onderstaande velden leeg als je geen nieuw wachtwoord wilt instellen</p>";
@@ -165,33 +150,36 @@ if($showForm){
         echo "<div class=\"form-input\">";
             $fontOptions = array("Roboto", "Lato", "Open Sans", "Poppins");
             echo "<label>Profiel lettertype</label>";
-            echo "<select name=\"profileFont\" placeholder=\"Profiel lettertype\">";
+            echo "<select name=\"profileFont\" placeholder=\"Profiel lettertype\" required>";
                 for($i = 0; $i < count($fontOptions); $i++){
-                    echo "<option value=\"".$fontOptions[$i]."\">".$fontOptions[$i]."</option>";
+                    if(strtolower($profileFont) == strtolower($fontOptions[$i]))
+                        echo "<option value=\"".$fontOptions[$i]."\" selected>".$fontOptions[$i]."</option>";
+                    else
+                        echo "<option value=\"".$fontOptions[$i]."\">".$fontOptions[$i]."</option>";
                 }
             echo "</select>";
         echo "</div>";
 
         echo "<div class=\"form-input\">";
             echo "<label>Profiel kleur</label>";
-            echo "<input type=\"color\" name=\"profileColor\" placeholder=\"Profiel kleur\">";
+            echo "<input type=\"color\" value=\"".$profileColor."\" name=\"profileColor\" placeholder=\"Profiel kleur\" required>";
         echo "</div>";
 
         echo "<div class=\"form-input\">";
             echo "<label>Biografie</label>";
-            echo "<textarea placeholder=\"Biografie\"></textarea>";
+            echo "<textarea placeholder=\"Biografie\" name=\"biography\">".$biography."</textarea>";
         echo "</div>";
 
         echo "<div class=\"form-input\">";
             echo "<label>Profielfoto</label>";
             echo "<input type=\"file\" name=\"profilePicture\">";
         echo "</div>";
-
+        
         echo "<br><br>";
 
         echo "<div class=\"form-input\">";
             echo "<label>Huidig wachtwoord</label>";
-            echo "<input type=\"password\" name=\"password\" placeholder=\"Huidige wachtwoord\">";
+            echo "<input type=\"password\" name=\"password\" placeholder=\"Huidige wachtwoord\" required>";
         echo "</div>";
 
         echo "<div class=\"form-input\">";
