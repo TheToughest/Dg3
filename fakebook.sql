@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.3
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Gegenereerd op: 03 nov 2021 om 09:23
--- Serverversie: 10.4.14-MariaDB
--- PHP-versie: 7.2.34
+-- Gegenereerd op: 08 dec 2021 om 11:32
+-- Serverversie: 10.4.21-MariaDB
+-- PHP-versie: 8.0.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -66,7 +66,9 @@ INSERT INTO `page` (`id`, `title`, `content`) VALUES
 (2, 'Registreren', NULL),
 (3, 'Tijdlijn', NULL),
 (4, 'Uitloggen', NULL),
-(5, 'Profiel', NULL);
+(5, 'Profiel', NULL),
+(6, 'Profiel bewerken', NULL),
+(7, 'Ontdekken', 'Op deze pagina kun je mensen zoeken via de zoekbalk, en daaronder vind je een overzicht met gemeenschappelijke vrienden');
 
 -- --------------------------------------------------------
 
@@ -93,7 +95,8 @@ INSERT INTO `post` (`id`, `userId`, `content`, `postDate`) VALUES
 (5, 2, 'Test of dit werkt', '2021-10-07 11:31:38'),
 (6, 2, 'Dit\r\n\r\nis\r\n\r\nvet\r\n\r\ncool', '2021-10-07 11:31:47'),
 (7, 2, 'Niks', '2021-10-07 11:37:39'),
-(8, 2, 'Hoi', '2021-10-07 12:21:44');
+(8, 2, 'Hoi', '2021-10-07 12:21:44'),
+(9, 2, 'fetgg', '2021-12-08 08:46:50');
 
 -- --------------------------------------------------------
 
@@ -111,16 +114,18 @@ CREATE TABLE `user` (
   `profilePicUrl` varchar(500) DEFAULT NULL,
   `biography` text DEFAULT NULL,
   `birthdate` date DEFAULT NULL,
-  `gender` int(11) DEFAULT NULL
+  `gender` int(11) DEFAULT NULL,
+  `profileFont` varchar(100) DEFAULT NULL,
+  `profileColor` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Gegevens worden geëxporteerd voor tabel `user`
 --
 
-INSERT INTO `user` (`id`, `email`, `password`, `firstName`, `lastName`, `country`, `profilePicUrl`, `biography`, `birthdate`, `gender`) VALUES
-(2, 'jaimy.tieck@gmail.com', '$2y$10$WSUkQoSdd9lmSmSlmxiSJOW86V19aIs/5IbjevI2GDD9FLD5cqIFS', 'Jaimy', 'Tieck', 'Nederland', NULL, NULL, '2003-08-12', 0),
-(3, 'info@jaimytieck.com', '$2y$10$TxAYhtWRbelRLRgZC0qGwOqccp4Ww6sMPDc1gwrua4jJU9lAy9eRq', 'Jaimy', 'Tieck', 'Albanië', NULL, NULL, '2003-08-12', 0);
+INSERT INTO `user` (`id`, `email`, `password`, `firstName`, `lastName`, `country`, `profilePicUrl`, `biography`, `birthdate`, `gender`, `profileFont`, `profileColor`) VALUES
+(2, 'jaimy.tieck@gmail.com', '$2y$10$Z0BYfxDq.AR9DEqaGWFfoOezDNa948XAyE4GR/Qbmm4.Ry81XQZU6', 'Henk Peter', 'Gerardus', 'Duitsland', 'gorilla-g0c394d5ed_1920.jpg', 'hoi ik ben henk peter gerardus', '2003-01-29', 0, 'Lato', '#0ebe3a'),
+(3, 'info@jaimytieck.com', '$2y$10$TxAYhtWRbelRLRgZC0qGwOqccp4Ww6sMPDc1gwrua4jJU9lAy9eRq', 'Jaimy', 'Tieck', 'Albanië', NULL, NULL, '2003-08-12', 0, 'roboto', '#00ff00');
 
 --
 -- Indexen voor geëxporteerde tabellen
@@ -164,25 +169,25 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT voor een tabel `friend`
 --
 ALTER TABLE `friend`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT voor een tabel `friend_request`
 --
 ALTER TABLE `friend_request`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT voor een tabel `page`
 --
 ALTER TABLE `page`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT voor een tabel `post`
 --
 ALTER TABLE `post`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT voor een tabel `user`
