@@ -12,7 +12,7 @@
         echo "<input type=\"submit\" value=\"Zoeken\">";
     echo "</form>";
 
-    if(isset($sStr)){
+    if(isset($sStr) && strlen($sStr) > 0){
         echo "<strong>Zoekresultaten voor \"".$sStr."\":</strong>";
     }
 
