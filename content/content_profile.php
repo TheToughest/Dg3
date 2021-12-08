@@ -11,7 +11,8 @@ if(isset($_GET["profileId"]) && $_GET["profileId"] > 0){
     
         echo "<h3>".$userData["firstName"]." ".$userData["lastName"]."</h3>";
 
-        echo "<a href=\"?page=6\">Je profiel bewerken</a>";
+        if($_GET["profileId"] == $_SESSION["userId"])
+            echo "<a href=\"?page=6\">Je profiel bewerken</a>";
     
     
         // Get posts
