@@ -76,33 +76,36 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         $succes = false;
                     }
 
-                    $uploaddir = 'uploads/';
-                    $uploadfile = $uploaddir . basename($_FILES['profilePicture']['name']);
-
-                    $allowed = array('png', 'jpg');
-                    $filename = $_FILES['profilePicture']['name'];
-                    $ext = pathinfo($filename, PATHINFO_EXTENSION);
-                    if (!in_array($ext, $allowed)) {
-                        
-                        array_push($errors, "Ongeldig bestandstype.");
-                    } else {
-                        if (move_uploaded_file($_FILES['profilePicture']['tmp_name'], $uploadfile)) {
-                            // uploaded
-                            // update db field profilepicurl
-                            $sql = "UPDATE user SET profilePicUrl='".$filename."' WHERE id=".$_SESSION["userId"];
-                            if($update = $db->prepare($sql)){
-                                if(!$update->execute()){
+                    if (file_exists($_FILES['profilePicture']['tmp_name']) || is_uploaded_file($_FILES['profilePicture']['tmp_name'])){
+                        $uploaddir = 'uploads/';
+                        $uploadfile = $uploaddir . basename($_FILES['profilePicture']['name']);
+    
+                        $allowed = array('png', 'jpg');
+                        $filename = $_FILES['profilePicture']['name'];
+                        $ext = pathinfo($filename, PATHINFO_EXTENSION);
+                        if (!in_array($ext, $allowed)) {
+                            
+                            array_push($errors, "Ongeldig bestandstype.");
+                        } else {
+                            if (move_uploaded_file($_FILES['profilePicture']['tmp_name'], $uploadfile)) {
+                                // uploaded
+                                // update db field profilepicurl
+                                $sql = "UPDATE user SET profilePicUrl='".$filename."' WHERE id=".$_SESSION["userId"];
+                                if($update = $db->prepare($sql)){
+                                    if(!$update->execute()){
+                                        $succes = false;
+                                    }   
+                                } else {
                                     $succes = false;
-                                }   
+                                }
+    
                             } else {
                                 $succes = false;
+                                // echo "Possible file upload attack!\n";
                             }
-
-                        } else {
-                            $succes = false;
-                            // echo "Possible file upload attack!\n";
                         }
                     }
+
 
                     
 
@@ -262,7 +265,7 @@ if($showForm){
 
         echo "<div class=\"form-input\">";
             echo "<label>Profielfoto</label>";
-            echo "<input type=\"file\" name=\"profilePicture\">";
+            echo "<input type=\"file\" name=\"profilePicture\" accept=\"image/*\">";
         echo "</div>";
         
         echo "<br><br>";
