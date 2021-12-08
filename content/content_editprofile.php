@@ -23,7 +23,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         if(strlen($newpassword) < 8){
             array_push($errors, "Je nieuwe wachtwoord moet minimaal 8 tekens zijn.");
         } else {
-            if($password != $newpassword){
+            if($newpassword != $newpassword2){
                 array_push($errors, "Je nieuwe wachtwoord komt niet overeen.");
             }
         }
@@ -34,10 +34,96 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
     if(!count($errors) > 0){
         // first check if password is correct
-        
-        if($password != $newpassword){
-            // change password
+        $sql = "SELECT password FROM user WHERE id=".$_SESSION["userId"];
+        if($result = $db->prepare($sql)){
+            $result->execute();
+            if($result->rowCount() == 1){
+                $result = $result->fetchAll(PDO::FETCH_ASSOC);
+                if(password_verify($password, $result[0]["password"])){
+
+
+                    $succes = true;
+                    // Change password if needed
+                    if(strlen($newpassword) > 0){
+                        if($password != $newpassword){
+                            // change password
+                            $sql = "UPDATE user SET password='".password_hash($newpassword, PASSWORD_DEFAULT)."' WHERE id=".$_SESSION["userId"];
+                            if($update = $db->prepare($sql)){
+                                if(!$update->execute()){
+                                    $succes = false;
+                                }   
+                            } else {
+                                $succes = false;
+                            }
+                        }
+                    }
+
+                    $sql = "UPDATE user SET firstname='".$firstname."',
+                    lastname='".$lastname."',
+                    gender='".$gender."',
+                    birthdate='".$birthdate."',
+                    country='".$country."',
+                    email='".$email."',
+                    profileFont='".$profileFont."', 
+                    profileColor='".$profileColor."', 
+                    biography='".$biography."' 
+                    WHERE id='".$_SESSION["userId"]."'";
+                    if($update2 = $db->prepare($sql)){
+                        if(!$update2->execute()){
+                            $succes = false;
+                        }   
+                    } else {
+                        $succes = false;
+                    }
+
+                    $uploaddir = 'uploads/';
+                    $uploadfile = $uploaddir . basename($_FILES['profilePicture']['name']);
+
+                    $allowed = array('png', 'jpg');
+                    $filename = $_FILES['profilePicture']['name'];
+                    $ext = pathinfo($filename, PATHINFO_EXTENSION);
+                    if (!in_array($ext, $allowed)) {
+                        
+                        array_push($errors, "Ongeldig bestandstype.");
+                    } else {
+                        if (move_uploaded_file($_FILES['profilePicture']['tmp_name'], $uploadfile)) {
+                            // uploaded
+                            // update db field profilepicurl
+                            $sql = "UPDATE user SET profilePicUrl='".$filename."' WHERE id=".$_SESSION["userId"];
+                            if($update = $db->prepare($sql)){
+                                if(!$update->execute()){
+                                    $succes = false;
+                                }   
+                            } else {
+                                $succes = false;
+                            }
+
+                        } else {
+                            $succes = false;
+                            // echo "Possible file upload attack!\n";
+                        }
+                    }
+
+                    
+
+                    if($succes = true){
+                        $returnMessage = "Je wijzigingen zijn opgeslagen!";
+                    } else {
+                        $returnMessage = "Je wijzigingen konden niet worden opgeslagen.";
+                    }
+
+
+                    // Change rest of profile
+                } else {
+                    array_push($errors, "Je wachtwoord is incorrect.");
+                }
+            } else {
+                array_push($errors, "Je gegevens konden niet worden opgehaald (1)");
+            }
+        } else {
+            array_push($errors, "Je gegevens konden niet worden opgehaald (2)");
         }
+        
 
 
     }
@@ -89,7 +175,11 @@ if($showForm){
         echo "</ul>";
     }
 
-    echo "<form method=\"POST\">";
+    if(isset($returnMessage)){
+        echo $returnMessage;
+    }
+
+    echo "<form method=\"POST\" enctype=\"multipart/form-data\">";
 
         echo "<h2>Accountgegevens bewerken</h2>";
 
@@ -108,9 +198,9 @@ if($showForm){
             $genderOptions = array("Man", "Vrouw");
             for($i = 0; $i < count($genderOptions); $i++){
                 if($gender == $i){
-                    echo "<input type=\"radio\" name=\"gender\" id=\"gender_".$i."\" value=\"".$genderOptions[$i]."\" checked required>";
+                    echo "<input type=\"radio\" name=\"gender\" id=\"gender_".$i."\" value=\"".$i."\" checked required>";
                 } else {
-                    echo "<input type=\"radio\" name=\"gender\" id=\"gender_".$i."\" value=\"".$genderOptions[$i]."\" required>";
+                    echo "<input type=\"radio\" name=\"gender\" id=\"gender_".$i."\" value=\"".$i."\" required>";
                 }
                     
 
@@ -189,5 +279,3 @@ if($showForm){
     echo "</form>";
 
 }
-
-?>
