@@ -1,7 +1,6 @@
 <?php
 $userData = getUserData($db, $_SESSION["userId"]);
 echo "<h1>Welkom terug ".$userData["firstName"]." ".$userData["lastName"]."!</h1>";
-echo "<a href=\"?page=4\">Uitloggen</a>";
 $showForm = true;
 $errors = array();
 

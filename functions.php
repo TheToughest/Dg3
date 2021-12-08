@@ -96,5 +96,48 @@ function removeFriend($db, $userId1, $userId2){
     }
 }
 
+function getAllFriendIdsFromUser($db, $userId){
+    $returnArray = array();
+    $sql = "SELECT userId1, userId2 FROM friend WHERE (userId1 = ".$userId." || userId2 = ".$userId.")";
+    if($result = $db->prepare($sql)){
+        $result->execute();
+        if($result->rowCount() > 0){
+            $result = $result->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach($result as $row){
+                if($row["userId1"] != $userId){
+                    array_push($returnArray, $row["userId1"]);
+                } else {
+                    array_push($returnArray, $row["userId2"]);
+                }
+            }
+        }
+    }
+
+    return $returnArray;
+}
+
+function getCommonFriends($db, $userId){
+    $returnArray = array();
+
+    $userFriends = getAllFriendIdsFromUser($db, $userId);
+
+    // First we loop trough all friends of user
+    for($i = 0; $i < count($userFriends); $i++){
+        // Than we get all friends from that user
+        $thisUsersFriends = getAllFriendIdsFromUser($db, $userFriends[$i]);
+        // Than we loop through those friends to see if they are already friends with logged in user and to see if they are not in the array already to prevent duplicates
+        for($j = 0; $j < count($thisUsersFriends); $j++){
+            if(!in_array($thisUsersFriends[$j], $userFriends)){
+                if(!in_array($thisUsersFriends[$j], $returnArray)){
+                    array_push($returnArray, $thisUsersFriends[$j]);
+                }
+            }
+        }
+    }
+
+    return $returnArray;
+}
+
 
 ?>
