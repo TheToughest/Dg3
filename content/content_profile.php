@@ -11,8 +11,51 @@ if(isset($_GET["profileId"]) && $_GET["profileId"] > 0){
     
         echo "<h3>".$userData["firstName"]." ".$userData["lastName"]."</h3>";
 
-        if($_GET["profileId"] == $_SESSION["userId"])
+        if($_GET["profileId"] == $_SESSION["userId"]){
+            // profile edit button
             echo "<a href=\"?page=6\">Je profiel bewerken</a>";
+        } else {
+            // Friend button (remove, add, accept, decline);
+            if(isset($_POST["cancelRequest"])){
+                deleteFriendRequest($db, $_SESSION["userId"], $_GET["profileId"]);
+            }
+
+            if(isset($_POST["acceptRequest"])){
+                // add friend
+                addFriend($db, $_SESSION["userId"], $_GET["profileId"]);
+            }
+
+            if(isset($_POST["deleteFriend"])){
+                // delete friend
+                removeFriend($db, $_SESSION["userId"], $_GET["profileId"]);
+            }
+
+            if(isset($_POST["declineRequest"])){
+                deleteFriendRequest($db, $_GET["profileId"], $_SESSION["userId"]);
+            }
+
+            if(isset($_POST["sendRequest"])){
+                newFriendRequest($db, $_SESSION["userId"], $_GET["profileId"]);
+            }
+
+
+            echo "<form method=\"POST\">";
+                if(checkIfPendingFriendRequest($db, $_SESSION["userId"], $_GET["profileId"])){
+                    // logged in user already sent request (option to cancel)
+                    echo "<input type=\"submit\" name=\"cancelRequest\" value=\"Vriendschapsverzoek annuleren\">";
+                } else if(checkIfPendingFriendRequest($db, $_GET["profileId"], $_SESSION["userId"])){
+                    // logged in user has request from target (option to accept or decline)
+                    echo "<input type=\"submit\" name=\"acceptRequest\" value=\"Vriendschapsverzoek accepteren\">";
+                    echo "<input type=\"submit\" name=\"declineRequest\" value=\"Vriendschapsverzoek weigeren\">";
+                } else if(checkIfFriends($db, $_SESSION["userId"], $_GET["profileId"])){
+                    echo "<input type=\"submit\" name=\"deleteFriend\" value=\"Vriend verwijderen\">";
+                } else {
+                    // Not friends, show send request button
+                    echo "<input type=\"submit\" name=\"sendRequest\" value=\"Vriendschapsverzoek sturen\">";
+                }
+            echo "</form>";
+        }
+            
     
     
         // Get posts
