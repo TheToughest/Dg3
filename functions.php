@@ -139,5 +139,15 @@ function getCommonFriends($db, $userId){
     return $returnArray;
 }
 
+function getLatestPostIdFromUser($db, $userId){
+    $sql = "SELECT id FROM post WHERE userId='".$userId."' ORDER BY postDate DESC LIMIT 1";
+    if($result = $db->prepare($sql)){
+        $result->execute();
+        if($result->rowCount() == 1){
+            $result = $result->fetchAll(PDO::FETCH_ASSOC);
+            return intval($result[0]["id"]);
+        }
+    }
+}
 
 ?>

@@ -42,16 +42,13 @@ if($showForm){
     echo "</form>";
 }
 
-$sql = "SELECT id FROM post ORDER BY postDate DESC";
-if($result = $db->prepare($sql)){
-    $result->execute();
-    if($result->rowCount() > 0){
-        $result = $result->fetchAll(PDO::FETCH_ASSOC);
 
-        foreach($result as $post){
-            $p = new Post($db, $post["id"]);
-            $p->render();
-        }
+$friends = getAllFriendIdsFromUser($db, $_SESSION["userId"]);
+foreach($friends as $friend){
+    $postId = getLatestPostIdFromUser($db, $friend);
+    if(isset($postId) && is_numeric($postId) && $postId > 0){
+        $p = new Post($db, $postId);
+        $p->render();
     }
 }
 ?>
