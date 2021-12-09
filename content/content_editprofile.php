@@ -4,8 +4,8 @@ $errors = array();
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
 
-    $firstname = $_POST["firstname"];
-    $lastname = $_POST["lastname"];
+    $firstName = $_POST["firstName"];
+    $lastName = $_POST["lastName"];
     $gender = $_POST["gender"];
     $birthdate = $_POST["birthdate"];
     $country = $_POST["country"];
@@ -58,8 +58,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         }
                     }
 
-                    $sql = "UPDATE user SET firstname='".$firstname."',
-                    lastname='".$lastname."',
+                    $sql = "UPDATE user SET firstName='".$firstName."',
+                    lastName='".$lastName."',
                     gender='".$gender."',
                     birthdate='".$birthdate."',
                     country='".$country."',
@@ -132,8 +132,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     }
 
 } else {
-    $firstname = "";
-    $lastname = "";
+    $firstName = "";
+    $lastName = "";
     $gender = "";
     $birthdate = "";
     $country = "";
@@ -146,15 +146,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $profilePicture = "";
     $password = "";
 
-    $sql = "SELECT firstname, lastname, gender, birthdate, country, email, profileFont, profileColor, biography FROM user WHERE id=".$_SESSION["userId"]." LIMIT 1";
+    $sql = "SELECT firstName, lastName, gender, birthdate, country, email, profileFont, profileColor, biography FROM user WHERE id=".$_SESSION["userId"]." LIMIT 1";
     if($result = $db->prepare($sql)){
         $result->execute();
         if($result->rowCount() > 0){
             $result = $result->fetchAll(PDO::FETCH_ASSOC);
             $result = $result[0];
 
-            $firstname = $result["firstname"];
-            $lastname = $result["lastname"];
+            $firstName = $result["firstName"];
+            $lastName = $result["lastName"];
             $gender = $result["gender"];
             $birthdate = $result["birthdate"];
             $country = $result["country"];
@@ -188,12 +188,12 @@ if($showForm){
 
         echo "<div class=\"form-input\">";
             echo "<label>Voornaam</label>";
-            echo "<input type=\"text\" name=\"firstname\" value=\"".$firstname."\" placeholder=\"Voornaam\" required>";
+            echo "<input type=\"text\" name=\"firstName\" value=\"".$firstName."\" placeholder=\"Voornaam\" required>";
         echo "</div>";
 
         echo "<div class=\"form-input\">";
             echo "<label>Achternaam</label>";
-            echo "<input type=\"text\" name=\"lastname\" value=\"".$lastname."\" placeholder=\"Achternaam\" required>";
+            echo "<input type=\"text\" name=\"lastName\" value=\"".$lastName."\" placeholder=\"Achternaam\" required>";
         echo "</div>";
 
         echo "<div class=\"form-input\">";

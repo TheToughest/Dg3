@@ -1,0 +1,4 @@
+# Prevent caching of customization file
+<FilesMatch "^profileCustomization.css$">
+Header set Cache-Control "max-age=0, private, no-store, no-cache, must-revalidate"
+</FilesMatch>

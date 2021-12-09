@@ -74,9 +74,71 @@ if($result = $db->prepare($sql)){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?php
     echo "<title>" . $pageTitle . " | Fakebook</title>";
+
+    $profileColor = "#fff";
+    $profileFont = "'Roboto', sans-serif";
+    if(isset($_GET["profileId"]) && $_GET["profileId"] > 0){
+        // get user styles
+        $userData = getUserData($db, $_GET["profileId"]);
+        if(strlen($userData["profileFont"]) < 1){
+            $profileFont = "'Roboto', sans-serif";
+        } else {
+            switch(strtolower($userData["profileFont"])){
+                case "roboto":
+                    $profileFont = "'Roboto', sans-serif";
+                break;
+                case "lato":
+                    $profileFont = "'Lato', sans-serif";
+                break;
+                case "poppins":
+                    $profileFont = "'Poppins', sans-serif";
+                break;
+                case "open sans":
+                    $profileFont = "'Open Sans', sans-serif";
+                break;
+            }
+        }
+
+        if(strlen($userData["profileColor"]) < 1){
+            $profileColor = "#fff";
+        } else {
+            $profileColor = strtolower($userData["profileColor"]);
+        }
+    } else if(isset($_SESSION["userId"]) && $_SESSION["userId"] > 0){
+        // get user styles
+        $userData = getUserData($db, $_SESSION["userId"]);
+        if(strlen($userData["profileFont"]) < 1){
+            $profileFont = "'Roboto', sans-serif";
+        } else {
+            switch(strtolower($userData["profileFont"])){
+                case "roboto":
+                    $profileFont = "'Roboto', sans-serif";
+                break;
+                case "lato":
+                    $profileFont = "'Lato', sans-serif";
+                break;
+                case "poppins":
+                    $profileFont = "'Poppins', sans-serif";
+                break;
+                case "open sans":
+                    $profileFont = "'Open Sans', sans-serif";
+                break;
+            }
+        }
+
+        if(strlen($userData["profileColor"]) < 1){
+            $profileColor = "#fff";
+        } else {
+            $profileColor = strtolower($userData["profileColor"]);
+        }
+    }
+
+    echo "<style>:root {--profile-color: ".$profileColor."; --profile-font: ".$profileFont.";}</style>";
+   
     ?>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="profileCustomization.css">
 </head>
 
 <body>
@@ -85,7 +147,7 @@ if($result = $db->prepare($sql)){
             include_once("content/content_navbar.php");
         }
             
-        echo "<div class=\"container\">";
+        echo "<div class=\"container contentCntr\">";
             switch($activePageId){
                 // If no page is selected (404)
                 default:

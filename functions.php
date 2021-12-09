@@ -66,6 +66,24 @@ function checkIfPendingFriendRequest($db, $senderId, $receiverId){
     return $return;
 }
 
+function getPendingRequests($db, $receiverId){
+    $returnArray = array();
+    // Checks if the sender has sent request to receiver
+    $sql = "SELECT senderId FROM friend_request RIGHT JOIN user ON senderId=user.id WHERE receiverId='".$receiverId."'";
+    if($result = $db->prepare($sql)){
+        $result->execute();
+        if($result->rowCount() > 0){
+            $result = $result->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach($result as $row){
+                array_push($returnArray, $row["senderId"]);
+            }
+        }
+    }
+
+    return $returnArray;
+}
+
 function checkIfFriends($db, $userId1, $userId2){
     $return = false;
 
@@ -107,7 +125,7 @@ function getAllFriendIdsFromUser($db, $userId){
             foreach($result as $row){
                 if($row["userId1"] != $userId){
                     array_push($returnArray, $row["userId1"]);
-                } else {
+                } else if($row["userId2"] != $userId) {
                     array_push($returnArray, $row["userId2"]);
                 }
             }
@@ -130,7 +148,10 @@ function getCommonFriends($db, $userId){
         for($j = 0; $j < count($thisUsersFriends); $j++){
             if(!in_array($thisUsersFriends[$j], $userFriends)){
                 if(!in_array($thisUsersFriends[$j], $returnArray)){
-                    array_push($returnArray, $thisUsersFriends[$j]);
+                    if($thisUsersFriends[$j] != $userId){
+                        array_push($returnArray, $thisUsersFriends[$j]);
+                    }
+                    
                 }
             }
         }
@@ -150,4 +171,54 @@ function getLatestPostIdFromUser($db, $userId){
     }
 }
 
+function formatDateForPost($date){
+    // input 2021-01-31 00:00:00
+    // output 03 januari 2021
+    $day = substr($date, 8, 2);
+    $month = substr($date, 5, 2);
+    $year = substr($date, 0, 4);
+    $month = getMonthName($month);
+    return intval($day) . " " . $month . " " . $year;
+}
+
+function getMonthName($number){
+    switch(intval($number)){
+        case 1:
+            return "januari";
+        break;
+        case 2:
+            return "februari";
+        break;
+        case 3:
+            return "maart";
+        break;
+        case 4:
+            return "april";
+        break;
+        case 5:
+            return "mei";
+        break;
+        case 6:
+            return "juni";
+        break;
+        case 7:
+            return "juli";
+        break;
+        case 8:
+            return "augustus";
+        break;
+        case 9:
+            return "september";
+        break;
+        case 10:
+            return "oktober";
+        break;
+        case 11:
+            return "november";
+        break;
+        case 12:
+            return "december";
+        break;
+    }
+}
 ?>

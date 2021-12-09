@@ -3,8 +3,8 @@ $showForm = true;
 $errors = array();
 
 if(isset($_POST["submit"])){
-    $firstname = trim(strip_tags($_POST["firstname"]));
-    $lastname = trim(strip_tags($_POST["lastname"]));
+    $firstName = trim(strip_tags($_POST["firstName"]));
+    $lastName = trim(strip_tags($_POST["lastName"]));
 
     if(isset($_POST["gender"])){
         $gender = trim(strip_tags($_POST["gender"]));
@@ -18,19 +18,19 @@ if(isset($_POST["submit"])){
     $password = trim(strip_tags($_POST["password"]));
     $password2 = trim(strip_tags($_POST["password2"]));
 
-    if(strlen($firstname) < 1){
+    if(strlen($firstName) < 1){
         array_push($errors, "Vul je voornaam in om door te gaan.");
     }
 
-    if(strlen($lastname) < 1){
+    if(strlen($lastName) < 1){
         array_push($errors, "Vul je achternaam in om door te gaan.");
     }
 
-    if(strlen($firstname) > 100){
+    if(strlen($firstName) > 100){
         array_push($errors, "Je voornaam mag niet korter zijn dan 100 tekens, kort deze in om door te gaan.");
     }
 
-    if(strlen($lastname) > 100){
+    if(strlen($lastName) > 100){
         array_push($errors, "Je achternaam mag niet korter zijn dan 100 tekens, kort deze in om door te gaan.");
     }
 
@@ -68,8 +68,8 @@ if(isset($_POST["submit"])){
                 array_push($errors, "Er bestaat al een account met dit email adres.");
             } else {
                 $sql = "INSERT INTO user (firstName, lastName, country, birthdate, gender, email, password) VALUES (
-                '".$firstname."', 
-                '".$lastname."', 
+                '".$firstName."', 
+                '".$lastName."', 
                 '".$country."', 
                 '".$birthdate."', 
                 '".$gender."', 
@@ -90,8 +90,8 @@ if(isset($_POST["submit"])){
         }
     }
 } else {
-    $firstname = "";
-    $lastname = "";
+    $firstName = "";
+    $lastName = "";
     $gender = "";
     $birthdate = "";
     $country = "";
@@ -108,8 +108,8 @@ if(isset($_POST["submit"])){
         echo "</ul>";
     }
     echo "<form method=\"POST\">";
-        echo "<input type=\"text\" name=\"firstname\" value=\"".$firstname."\" placeholder=\"Voornaam\">";
-        echo "<input type=\"text\" name=\"lastname\" value=\"".$lastname."\" placeholder=\"Achternaam\">";
+        echo "<input type=\"text\" name=\"firstName\" value=\"".$firstName."\" placeholder=\"Voornaam\">";
+        echo "<input type=\"text\" name=\"lastName\" value=\"".$lastName."\" placeholder=\"Achternaam\">";
         $genderOptions = array("Man", "Vrouw");
         for($i = 0; $i < count($genderOptions); $i++){
             echo "<input type=\"radio\" name=\"gender\" id=\"gender_".$i."\" value=\"".$genderOptions[$i]."\">";
@@ -139,12 +139,12 @@ if(isset($_POST["submit"])){
                         <div class="row">
                             <div class="col-md-6 mb-4">
                                 <div class="form-outline">
-                                    <input type="text" name="firstname" value="<?php $firstname ?>" placeholder="Voornaam" class="form-control form-control-lg"/>
+                                    <input type="text" name="firstName" value="<?php $firstName ?>" placeholder="Voornaam" class="form-control form-control-lg"/>
                                 </div>
                             </div>
                             <div class="col-md-6 mb-4">
                                 <div class="form-outline">
-                                    <input type="text" name="lastname" value="<?php $lastname ?>" placeholder="Achternaam" class="form-control form-control-lg"/>
+                                    <input type="text" name="lastName" value="<?php $lastName ?>" placeholder="Achternaam" class="form-control form-control-lg"/>
                                 </div>
                             </div>
                         </div>

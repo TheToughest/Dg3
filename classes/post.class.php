@@ -31,7 +31,7 @@ class Post{
     }
 
     private function getUserData(){
-        $sql = "SELECT firstName, lastName, profilePicUrl FROM user WHERE id='".$this->userId."' LIMIT 1";
+        $sql = "SELECT firstName, lastName, profilePicUrl, gender FROM user WHERE id='".$this->userId."' LIMIT 1";
         if($result = $this->db->prepare($sql)){
             $result->execute();
             if($result->rowCount() == 1){
@@ -39,7 +39,12 @@ class Post{
                 $result = $result[0];
 
                 $this->userFullName = $result["firstName"] . " " . $result["lastName"];
-                $this->profilePicturePath = $result["profilePicUrl"];
+                if(strlen($result["profilePicUrl"]) > 0){
+                    $this->profilePicturePath = "uploads/" . $result["profilePicUrl"];
+                } else {
+                    $this->profilePicturePath = "assets/images/nopicture_".$result["gender"].".png";
+                }
+                
             }
         }
     }
@@ -52,13 +57,66 @@ class Post{
         }
     }
 
+    private function formatDateForPost($date){
+        // input 2021-01-31 00:00:00
+        // output 03 januari 2021
+        $day = substr($date, 8, 2);
+        $month = substr($date, 5, 2);
+        $year = substr($date, 0, 4);
+        $month = $this->getMonthName($month);
+        return intval($day) . " " . $month . " " . $year;
+    }
+    
+    private function getMonthName($number){
+        switch(intval($number)){
+            case 1:
+                return "januari";
+            break;
+            case 2:
+                return "februari";
+            break;
+            case 3:
+                return "maart";
+            break;
+            case 4:
+                return "april";
+            break;
+            case 5:
+                return "mei";
+            break;
+            case 6:
+                return "juni";
+            break;
+            case 7:
+                return "juli";
+            break;
+            case 8:
+                return "augustus";
+            break;
+            case 9:
+                return "september";
+            break;
+            case 10:
+                return "oktober";
+            break;
+            case 11:
+                return "november";
+            break;
+            case 12:
+                return "december";
+            break;
+        }
+    }
+
     public function render(){
         if($this->userExists()){
-            echo "<div class=\"post\">";
-                echo "<a href=\"?profileId=".$this->userId."\"><strong>".$this->userFullName."</strong></a>";
-                echo "<span class=\"date\">".$this->date."</span>";
-                echo "<p>".$this->content."</p>";
+            echo "<div class=\"card post\">";
+                echo "<div class=\"card-body\">";
+                    echo "<h5 class=\"card-title\"><img src=\"".$this->profilePicturePath."\" alt=\"profielFoto\" class=\"profilePicture circle smallest\"><a class=\"link\" href=\"?profileId=".$this->userId."\">".$this->userFullName."</a><span class=\"text-muted\">".$this->formatDateForPost($this->date)."</span></h5>";
+                    echo "<p class=\"card-text\">".$this->content."</p>";
+                echo "</div>";
             echo "</div>";
+
         }
     }
 
