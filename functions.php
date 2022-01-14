@@ -39,9 +39,11 @@ function logout(){
 }
 
 function newFriendRequest($db, $senderId, $receiverId){
-    $sql = "INSERT INTO friend_request (senderId, receiverId) VALUES ('".$senderId."', '".$receiverId."')";
-    if($insert = $db->prepare($sql)){
-        $insert->execute();
+    if(!checkIfPendingFriendRequest($db, $senderId, $receiverId) && !checkIfPendingFriendRequest($db, $receiverId, $senderId)){
+        $sql = "INSERT INTO friend_request (senderId, receiverId) VALUES ('".$senderId."', '".$receiverId."')";
+        if($insert = $db->prepare($sql)){
+            $insert->execute();
+        }
     }
 }
 

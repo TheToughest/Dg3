@@ -100,43 +100,19 @@ if($result = $db->prepare($sql)){
         }
 
         if(strlen($userData["profileColor"]) < 1){
-            $profileColor = "#fff";
+            $profileColor = "#f8f9fa";
         } else {
             $profileColor = strtolower($userData["profileColor"]);
         }
-    } else if(isset($_SESSION["userId"]) && $_SESSION["userId"] > 0){
-        // get user styles
-        $userData = getUserData($db, $_SESSION["userId"]);
-        if(strlen($userData["profileFont"]) < 1){
-            $profileFont = "'Roboto', sans-serif";
-        } else {
-            switch(strtolower($userData["profileFont"])){
-                case "roboto":
-                    $profileFont = "'Roboto', sans-serif";
-                break;
-                case "lato":
-                    $profileFont = "'Lato', sans-serif";
-                break;
-                case "poppins":
-                    $profileFont = "'Poppins', sans-serif";
-                break;
-                case "open sans":
-                    $profileFont = "'Open Sans', sans-serif";
-                break;
-            }
-        }
-
-        if(strlen($userData["profileColor"]) < 1){
-            $profileColor = "#fff";
-        } else {
-            $profileColor = strtolower($userData["profileColor"]);
-        }
+    } else {
+        $profileColor = "#f8f9fa";
     }
 
     echo "<style>:root {--profile-color: ".$profileColor."; --profile-font: ".$profileFont.";}</style>";
    
     ?>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="profileCustomization.css">
 </head>
@@ -147,7 +123,7 @@ if($result = $db->prepare($sql)){
             include_once("content/content_navbar.php");
         }
             
-        echo "<div class=\"container contentCntr\">";
+        echo "<div class=\"container contentCntr bg-white pt-2 pb-2\">";
             switch($activePageId){
                 // If no page is selected (404)
                 default:
@@ -186,6 +162,10 @@ if($result = $db->prepare($sql)){
 
             }
         echo "</div>";
+
+        if(isLoggedIn()){
+            include_once("content/content_footer.php");
+        }
     ?>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>

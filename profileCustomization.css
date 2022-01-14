@@ -1,1 +1,1 @@
-body{background-color: var(--profile-color); font-family: var(--profile-font);}
+body{background-color: var(--profile-color)!important; font-family: var(--profile-font);}

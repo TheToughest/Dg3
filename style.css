@@ -1,16 +1,45 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato&family=Open+Sans&family=Poppins&family=Roboto&display=swap');
 
+body{background-color: #f8f9fa;}
+
 .profilePicture{width: 200px; height: 200px; object-fit: cover;}
 .profilePicture.circle{border-radius: 50%;}
+.profilePicture.medium{width: 150px; height: 150px;}
 .profilePicture.smaller{width: 100px; height: 100px;}
 .profilePicture.smallest{width: 50px; height: 50px;}
 
 .btn-dark{display:inline-block; padding:6px 12px!important; text-decoration: none; border: 0; border-radius: 5px; margin-right: 5px;}
 .post .text-muted{float: right; margin-left: 10px; font-size: 12px;}
 .post .link{color: #000; margin-left: 10px; text-decoration: none;}
-.post{margin-bottom: 20px;}]
+.post{margin-bottom: 20px;}
 
 .userList *::marker{display: none!important;}
 .userList li a { font-size: 1.2rem; color: #000; margin-left: 10px; text-decoration: none;}
 
 .contentCntr{background-color: #fff; min-height: calc(100vh - 56px);}
+
+#mobile {
+    display: none;
+}
+
+@media only screen and (max-width: 991px) {
+    #mobile {
+        display: block;
+    }
+    #desktop {
+        display: none;
+    }
+}
+
+.row{
+    overflow: hidden; 
+}
+
+.fill { 
+    min-height: 100%;
+    height: 100%;
+}
+
+.personen {
+    min-height: 300px;
+}

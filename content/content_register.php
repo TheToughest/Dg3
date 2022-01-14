@@ -136,15 +136,27 @@ if(isset($_POST["submit"])){
                     <form method="POST">
                         <h3 class="mb-5 text-uppercase">Vul hier je gegevens in</h3>
 
+                        <?php 
+                        
+                        if(count($errors) > 0){
+                            echo "<ul class=\"errors\">";
+                                for ($i=0; $i < count($errors); $i++) { 
+                                    echo "<li>".$errors[$i]."</li>";
+                                }
+                            echo "</ul>";
+                        }
+
+                        ?>
+
                         <div class="row">
                             <div class="col-md-6 mb-4">
                                 <div class="form-outline">
-                                    <input type="text" name="firstName" value="<?php $firstName ?>" placeholder="Voornaam" class="form-control form-control-lg"/>
+                                    <input type="text" name="firstName" value="<?php echo $firstName; ?>" placeholder="Voornaam" class="form-control form-control-lg"/>
                                 </div>
                             </div>
                             <div class="col-md-6 mb-4">
                                 <div class="form-outline">
-                                    <input type="text" name="lastName" value="<?php $lastName ?>" placeholder="Achternaam" class="form-control form-control-lg"/>
+                                    <input type="text" name="lastName" value="<?php echo $lastName; ?>" placeholder="Achternaam" class="form-control form-control-lg"/>
                                 </div>
                             </div>
                         </div>
@@ -165,20 +177,20 @@ if(isset($_POST["submit"])){
                         <div class="row">
                             <div class="col-md-6 mb-4">
                                 <div class="form-outline">
-                                    <input class="form-control form-control-lg" type="date" name="birthdate" value="<?php $birthdate ?>"placeholder="Geboortedatum">
+                                    <input class="form-control form-control-lg" type="date" name="birthdate" value="<?php echo $birthdate; ?>"placeholder="Geboortedatum">
                                     <label class="form-check-label" for="birthdate">Geboortedatum</label>
                                 </div>
                             </div>
                             <div class="col-md-6 mb-4">
                                 <div class="form-outline">
-                                    <input class="form-control form-control-lg" type="text" name="country" value="<?php $country ?>" placeholder="Land">
+                                    <input class="form-control form-control-lg" type="text" name="country" value="<?php echo $country; ?>" placeholder="Land">
                                     <label class="form-check-label" for="country">Land</label>
                                 </div>
                             </div>
                         </div>
 
                         <div class="form-outline mb-4">
-                            <input type="text" id="form3Example97" class="form-control form-control-lg" />
+                            <input type="email" name="email" value="<?php echo $email; ?>" placeholder="Email adres" class="form-control form-control-lg" id="form3Example97">
                             <label class="form-label" for="form3Example97">Email</label>
                         </div>
 
@@ -197,7 +209,8 @@ if(isset($_POST["submit"])){
 
                         <div class="d-flex justify-content-end pt-3">
                             <a href="index.php" value="registreer" class="btn btn-secondary btn-lg btn-block">Terug</a>
-                            <button type="button" class="btn btn-primary btn-lg ms-2">Registreer</button>
+                            <!-- <button type="button" class="btn btn-primary btn-lg ms-2">Registreer</button> -->
+                            <input name="submit" type="submit" value="Registreren" class="btn btn-primary btn-lg ms-2">
                         </div>
                     </form>     
                 </div>
