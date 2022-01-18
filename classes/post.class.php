@@ -7,6 +7,7 @@ class Post{
     private $userId;
     private $userFullName;
     private $profilePicUrl;
+    private $filename;
 
     public function __construct($db, $id){
         $this->db = $db;
@@ -24,6 +25,7 @@ class Post{
         
                 $result = $result[0];
                 $this->content = $result["content"];
+                $this->filename = $result["filename"];
                 $this->date = $result["postDate"];
                 $this->userId = $result["userId"];
             }
@@ -114,6 +116,9 @@ class Post{
                 echo "<div class=\"card-body\">";
                     echo "<h5 class=\"card-title\"><img src=\"".$this->profilePicturePath."\" alt=\"profielFoto\" class=\"profilePicture circle smallest\"><a class=\"link\" href=\"?profileId=".$this->userId."\">".$this->userFullName."</a><span class=\"text-muted\">".$this->formatDateForPost($this->date)."</span></h5>";
                     echo "<p class=\"card-text\">".$this->content."</p>";
+                    if(strlen($this->filename) > 0){
+                        echo "<img class=\"card-img-top\" src=\"uploads/".$this->filename."\" alt=\"Foto bij bericht\" style=\"width:250px;height:250px;display:block;object-fit:contain;\">";
+                    }
                 echo "</div>";
             echo "</div>";
 

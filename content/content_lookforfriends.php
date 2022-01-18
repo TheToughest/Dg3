@@ -76,7 +76,7 @@
                                         // logged in user has request from target (option to accept or decline)
                                         echo "<input type=\"hidden\" name=\"profileId\" value=\"".$user."\">";
                                         echo "<input type=\"submit\" class=\"btn btn-primary me-2\" name=\"acceptRequest\" value=\"Accepteren\">";
-                                        echo "<input type=\"submit\" class=\"btn btn-secondary\" name=\"declineRequest\" value=\"Weigeren\">";
+                                        echo "<input type=\"submit\" class=\"btn btn-secondary\" name=\"cancelRequest\" value=\"Weigeren\">";
                                     echo "</form>";
                                 }
                             echo "</div>";
@@ -91,7 +91,7 @@
                 }
             echo "</div>";
             echo "<div class=\"card p-2 personen\">";
-                echo "<h3>Gemeenschappelijke vrienden</h3>";
+                echo "<h3>Vrienden van vrienden</h3>";
                 $commonFriendIds = getCommonFriends($db, $_SESSION["userId"]);
                 if(count($commonFriendIds) > 0){
                     echo "<ul class=\"userList list-unstyled\">";

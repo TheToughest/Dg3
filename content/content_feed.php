@@ -20,10 +20,40 @@ if(isset($_POST["postSubmit"])){
         if($insert = $db->prepare($sql)){
             if($insert->execute()){
                 // Do something
-
-                header("Location: index.php");
             }
         }
+
+        if (file_exists($_FILES['filename']['tmp_name']) || is_uploaded_file($_FILES['filename']['tmp_name'])){
+            $uploaddir = 'uploads/';
+            $uploadfile = $uploaddir . basename($_FILES['filename']['name']);
+
+            $allowed = array('png', 'jpg');
+            $filename = $_FILES['filename']['name'];
+            $ext = pathinfo($filename, PATHINFO_EXTENSION);
+            if (!in_array($ext, $allowed)) {
+                $succes = false;
+                array_push($errors, "Ongeldig bestandstype.");
+            } else {
+                if (move_uploaded_file($_FILES['filename']['tmp_name'], $uploadfile)) {
+                    // uploaded
+                    // update db field profilepicurl
+                    $sql = "UPDATE post SET filename='".$filename."' WHERE id=".$db->lastInsertId();
+                    if($update = $db->prepare($sql)){
+                        if(!$update->execute()){
+                            $succes = false;
+                        }   
+                    } else {
+                        $succes = false;
+                    }
+
+                } else {
+                    $succes = false;
+                    // echo "Possible file upload attack!\n";
+                }
+            }
+        }
+
+        header("Location: index.php");
     }
 }
 
@@ -35,11 +65,16 @@ if(isset($_POST["postSubmit"])){
 
                 <?php
                 if($showForm){
-                    echo "<form method=\"POST\">";
+                    echo "<form method=\"POST\" enctype=\"multipart/form-data\">";
                         echo "<div class=\"row\">";
-                            echo "<h class=\"card-title\">Wat ben je aan het doen?</h>";
+
+                            echo "<label>Bericht plaatsen:</label>";
                             echo "<textarea class=\"card-text m-2 w-75\" rows=\"5\" placeholder=\"...\" cols=\"40\" name=\"content\" style=\"resize:none;\"></textarea>";
-                            echo "<input name=\"postSubmit\" class=\"btn btn-primary w-25 ms-2\" type=\"submit\" value=\"Plaatsen\">";
+
+                            echo "<label>Foto:</label>";
+                            echo "<input type=\"file\" name=\"filename\" class=\"form-control w-75 m-2\">";
+                            
+                            echo "<input name=\"postSubmit\" class=\"btn btn-primary w-25 ms-2 my-2\" type=\"submit\" value=\"Plaatsen\">";
                         echo "</div>";
                     echo "</form>";
                     if(count($errors) > 0){
